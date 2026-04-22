@@ -1,4 +1,6 @@
-package org.example;
+package model;
+
+import java.util.Objects;
 
 public class Recurso {
     private final int id_recurso;
@@ -45,4 +47,18 @@ public class Recurso {
     public void setCapacidad(int capacidad) {
         this.capacidad = capacidad;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Recurso recurso = (Recurso) o;
+        return id_recurso == recurso.id_recurso;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id_recurso);
+    }
+
+
 }
