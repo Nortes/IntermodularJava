@@ -9,12 +9,8 @@ import model.UsuarioNormal;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Period;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.Scanner;
 
 import static app.Entrada.leerFecha;
 
@@ -146,7 +142,7 @@ public class UsuarioView {
 
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------");
     }
-    public static void listarUsuario(Usuario user) throws SQLException, IOException {
+    public static void listarUsuario(Usuario user){
         if(user!=null) {
             int id = user.getId();
             String nombre = user.getNombre();
@@ -158,6 +154,7 @@ public class UsuarioView {
                 edad = String.valueOf(Period.between(fechaNac, LocalDate.now()).getYears());
             }
             String tipo;
+
             if(user instanceof Administrador) {
                 tipo = "ADMIN";
                 String telGuard = ((Administrador) user).getTelGuardia();
@@ -243,7 +240,7 @@ public class UsuarioView {
     }
     public static void modificarUsuario() throws SQLException, IOException {
 
-        Usuario user = null;
+        Usuario user;
         int opcion;
         int id;
 

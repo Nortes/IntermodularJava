@@ -10,7 +10,7 @@ import java.util.List;
 public class UsuarioController {
 
     public static Usuario findByPK(int id) throws SQLException {
-        Usuario user = null;
+        Usuario user;
         user = dao.UsuarioDAO.findByPk(id);
 
         return user;
