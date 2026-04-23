@@ -19,20 +19,19 @@ public class UsuarioView {
     public static void menu() {
         System.out.println("SISTEMA DE GESTIÓN DE USUARIOS");
         System.out.println("===============================");
-        System.out.println("0. Salir");
         System.out.println("1. Alta de usuario");
         System.out.println("2. Baja de usuario");
         System.out.println("3. Modificar usuario");
         System.out.println("4. Listar todos los usuarios");
         System.out.println("5. Buscar por nombre");
         System.out.println("6. Buscar por correo");
+        System.out.println("0. Volver");
     }
 
     public static void menuModif(Usuario user){
 
         System.out.println("MODIFICACIÓN DEL USUARIO "+user.getNombre());
         System.out.println("===============================");
-        System.out.println("0. Salir");
         System.out.println("1. Modificar Nombre");
         System.out.println("2. Modificar Contraseña");
         System.out.println("3. Modificar Correo");
@@ -65,6 +64,7 @@ public class UsuarioView {
                 System.out.println("7. Añadir Imagen de Perfil");
             }
         }
+        System.out.println("0. Volver");
     }
 
     public static void tipoUsuario(){

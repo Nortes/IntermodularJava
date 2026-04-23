@@ -14,12 +14,12 @@ public class RecursoView {
     public static void menu() {
         System.out.println("SISTEMA DE GESTIÓN DE RECURSOS");
         System.out.println("===============================");
-        System.out.println("0. Salir");
         System.out.println("1. Alta de recurso");
         System.out.println("2. Baja de recurso");
         System.out.println("3. Modificar recurso");
         System.out.println("4. Listar todos los recursos");
         System.out.println("5. Buscar por nombre");
+        System.out.println("0. Volver");
     }
 
     static void main(String[] args) {

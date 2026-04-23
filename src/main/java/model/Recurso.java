@@ -52,13 +52,11 @@ public class Recurso {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Recurso recurso = (Recurso) o;
-        return id_recurso == recurso.id_recurso;
+        return id_recurso == recurso.id_recurso || (Objects.equals(nombre, recurso.nombre) && Objects.equals(ubicacion, recurso.ubicacion));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id_recurso);
+        return Objects.hash(id_recurso, nombre, ubicacion);
     }
-
-
 }

@@ -11,10 +11,7 @@ public class RecursoController {
     }
 
     public static Recurso findByPK(int id) throws SQLException {
-        Recurso r1 = null;
-            r1 = dao.RecursoDAO.findByPk(id);
-
-        return r1;
+        return dao.RecursoDAO.findByPk(id);
     }
 
     public static Recurso  buscarPorNombre(String nombre) throws SQLException {

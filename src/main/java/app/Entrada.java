@@ -1,5 +1,6 @@
 package app;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -58,5 +59,39 @@ public interface Entrada {
         }while (!valido);
 
         return (fecha);
+    }
+
+    public static Time leerHorario() {
+        DateTimeFormatter formatter=DateTimeFormatter.ofPattern("HH:mm");
+        Time hora=null;
+        boolean valido=false;
+
+        do {
+            try{
+                hora = Time.valueOf(Entrada.limitador(5,false));
+            }catch (DateTimeParseException e){
+                System.out.println("Formato fecha (dd/mm/yyyy) incorrecto");
+                valido=false;
+            }
+        }while(!valido);
+
+        return (hora);
+    }
+
+    public static DiaSemana matchDiaSemana (String dia){
+        dia =  dia.toUpperCase();
+
+        return switch (dia) {
+            case "LUNES" -> DiaSemana.Lunes;
+            case "MARTES" -> DiaSemana.Martes;
+            case "MIERCOLES" -> DiaSemana.Miercoles;
+            case "MIÉRCOLES" -> DiaSemana.Miercoles;
+            case "JUEVES" -> DiaSemana.Jueves;
+            case "VIERNES" -> DiaSemana.Viernes;
+            case "SABADO" -> DiaSemana.Sabado;
+            case "SÁBADO" -> DiaSemana.Sabado;
+            case "DOMINGO" -> DiaSemana.Domingo;
+            default -> null;
+        };
     }
 }

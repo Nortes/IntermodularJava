@@ -3,10 +3,7 @@ package dao;
 import model.Recurso;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
 import java.sql.SQLException;
-import java.time.LocalDate;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class RecursoDAOTest {
