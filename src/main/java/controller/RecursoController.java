@@ -1,6 +1,8 @@
 package controller;
 
 import model.Recurso;
+import model.Reserva;
+
 import java.sql.*;
 import java.util.List;
 
@@ -35,6 +37,12 @@ public class RecursoController {
     public static void baja(int id) throws SQLException {
 
         if (dao.RecursoDAO.findByPk(id) != null) {
+            for(Reserva r: dao.ReservaDAO.listaReservas()){
+                if(r.getIdRecurso() == id){
+                    controller.ReservaController.baja(r.getId());
+                }
+            }
+
             dao.RecursoDAO.deleteRecurso(id);
             System.out.println("Dado de baja el Recurso "+ id);
         }

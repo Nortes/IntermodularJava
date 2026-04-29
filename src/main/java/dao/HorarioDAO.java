@@ -3,7 +3,10 @@ package dao;
 import app.DiaSemana;
 import app.Entrada;
 import model.Horario;
+
+import javax.swing.*;
 import java.sql.*;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,10 +19,27 @@ public class HorarioDAO {
 
         while (rs.next()) {
             int id = rs.getInt("id_horario");
-            DiaSemana dia = DiaSemana.valueOf(rs.getString("dia_semana"));
-            Time inicio = rs.getTime("hora_inicio");
-            Time fin = rs.getTime("hora_fin");
-
+            String diaSemana =rs.getString("dia_semana");
+            DiaSemana dia;
+            LocalTime inicio = rs.getTime("hora_inicio").toLocalTime();
+            LocalTime fin = rs.getTime("hora_fin").toLocalTime();
+            switch (diaSemana){
+                case "Lunes": dia = DiaSemana.Lunes;
+                break;
+                case "Martes": dia = DiaSemana.Martes;
+                break;
+                case "Miércoles": dia = DiaSemana.Miercoles;
+                break;
+                case "Jueves": dia = DiaSemana.Jueves;
+                break;
+                case "Viernes": dia = DiaSemana.Viernes;
+                break;
+                case "Sábado": dia = DiaSemana.Sabado;
+                break;
+                case "Domingo": dia = DiaSemana.Domingo;
+                break;
+                default: dia = null;
+            }
             horarios.add(new Horario(id,dia,inicio,fin));
         }
         dao.DBConnection.closeConnection();
@@ -33,8 +53,8 @@ public class HorarioDAO {
         ResultSet rs = ps.executeQuery();
         Horario result = null;
         if (rs.next()) {
-            result = new Horario(rs.getInt("id_horario"), Entrada.matchDiaSemana(rs.getString("dia_semana")), rs.getTime("hora_inicio"),
-                    rs.getTime("hora_fin"));
+            result = new Horario(rs.getInt("id_horario"), Entrada.matchDiaSemana(rs.getString("dia_semana")), rs.getTime("hora_inicio").toLocalTime(),
+                    rs.getTime("hora_fin").toLocalTime());
         }
         dao.DBConnection.closeConnection();
         return result;
@@ -52,8 +72,8 @@ public class HorarioDAO {
         PreparedStatement ps = cnx.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 
         ps.setString(1, String.valueOf(horario.getDia()));
-        ps.setTime(2, horario.getHoraInicio());
-        ps.setTime(3, horario.getHoraFin());
+        ps.setTime(2, Time.valueOf(horario.getHoraInicio()));
+        ps.setTime(3, Time.valueOf(horario.getHoraFin()));
         ps.executeUpdate();
 
         // nuevo código quiero devolver el nuevo id generado con el INSERT --> relación con el test de pruebas
@@ -74,8 +94,8 @@ public class HorarioDAO {
         PreparedStatement ps = cnx.prepareStatement(
                 "UPDATE horario SET dia_semana = ?, hora_inicio = ?, hora_fin = ? WHERE id_horario = ?");
         ps.setString(1, String.valueOf(horario.getDia()));
-        ps.setTime(2, horario.getHoraInicio());
-        ps.setTime(3, horario.getHoraFin());
+        ps.setTime(2, Time.valueOf(horario.getHoraInicio()));
+        ps.setTime(3, Time.valueOf(horario.getHoraFin()));
         ps.setInt(4, horario.getId());
         ps.executeUpdate();
         ps.close();

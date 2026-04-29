@@ -10,6 +10,7 @@ import model.Recurso;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.List;
 
 public class HorarioView {
@@ -45,7 +46,7 @@ public class HorarioView {
         }
     }
 
-    private static void listarTodos() throws SQLException {
+    public static void listarTodos() throws SQLException {
             List<Horario> lista= controller.HorarioController.listarTodos();
             System.out.printf("%-5s %-25s %-15s %-15s%n",
                     "ID", "DÍA", "HORA INICIO", "HORA FIN");
@@ -55,8 +56,8 @@ public class HorarioView {
             for (Horario h: lista){
                 int id = h.getId();
                 DiaSemana dia = h.getDia();
-                Time inicio = h.getHoraInicio();
-                Time fin = h.getHoraFin();
+                LocalTime inicio = h.getHoraInicio();
+                LocalTime fin = h.getHoraFin();
 
                 System.out.printf("%-5s %-25s %-15s %-15s%n",
                         id, dia, inicio, fin);
@@ -64,21 +65,21 @@ public class HorarioView {
             System.out.println("------------------------------------------------------------------------------------------------------");
     }
 
-    private static void listarHorario(Horario h) {
+    public static void listarHorario(Horario h) {
         int id = h.getId();
         DiaSemana dia = h.getDia();
-        Time inicio = h.getHoraInicio();
-        Time fin = h.getHoraFin();
+        LocalTime inicio = h.getHoraInicio();
+        LocalTime fin = h.getHoraFin();
 
         System.out.printf("%-5s %-25s %-15s %-15s%n",
                 id, dia, inicio, fin);
     }
 
-    private static void altaHorario()throws SQLException, IOException {
+    public static void altaHorario()throws SQLException, IOException {
     Horario h;
     DiaSemana dia;
-    Time inicio;
-    Time fin;
+    LocalTime inicio;
+    LocalTime fin;
 
         do{
             System.out.println("Día de la semana");
@@ -100,7 +101,7 @@ public class HorarioView {
         listarHorario(h);
     }
 
-    private static void actualizarHorario() throws SQLException {
+    public static void actualizarHorario() throws SQLException {
         System.out.print("Introduzca el ID del horario que desa actualizar: ");
 
         int id = Integer.parseInt(Entrada.limitador(1, true));
@@ -111,9 +112,9 @@ public class HorarioView {
             System.out.print("Indroduzca día de la semana: ");
             DiaSemana dia = Entrada.matchDiaSemana(Entrada.limitador(20, false));
             System.out.print("Introduzca hora de inicio: ");
-            Time  inicio = Entrada.leerHorario();
+            LocalTime  inicio = Entrada.leerHorario();
             System.out.print("Introduzca hora de fin: ");
-            Time fin = Entrada.leerHorario();
+            LocalTime fin = Entrada.leerHorario();
 
             Horario h = new Horario(id, dia, inicio, fin);
 

@@ -2,6 +2,7 @@ package app;
 
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
@@ -61,14 +62,14 @@ public interface Entrada {
         return (fecha);
     }
 
-    public static Time leerHorario() {
+    public static LocalTime leerHorario() {
         DateTimeFormatter formatter=DateTimeFormatter.ofPattern("HH:mm");
-        Time hora=null;
+        LocalTime hora=null;
         boolean valido=false;
 
         do {
             try{
-                hora = Time.valueOf(Entrada.limitador(5,false));
+                hora = LocalTime.parse(Entrada.limitador(5,false));
             }catch (DateTimeParseException e){
                 System.out.println("Formato fecha (dd/mm/yyyy) incorrecto");
                 valido=false;

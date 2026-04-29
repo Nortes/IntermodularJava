@@ -1,7 +1,6 @@
 package dao;
 
 import model.Recurso;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

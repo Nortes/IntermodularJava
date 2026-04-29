@@ -2,6 +2,8 @@ package view;
 
 import app.Entrada;
 import controller.RecursoController;
+import dao.DisponibleEnDAO;
+import model.DisponibleEn;
 import model.Recurso;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -17,8 +19,10 @@ public class RecursoView {
         System.out.println("1. Alta de recurso");
         System.out.println("2. Baja de recurso");
         System.out.println("3. Modificar recurso");
-        System.out.println("4. Listar todos los recursos");
-        System.out.println("5. Buscar por nombre");
+        System.out.println("4. Añadir un horario a un recurso");
+        System.out.println("5. Eliminar un horario a un recurso");
+        System.out.println("6. Listar todos los recursos");
+        System.out.println("7. Buscar por nombre");
         System.out.println("0. Volver");
     }
 
@@ -34,8 +38,10 @@ public class RecursoView {
                     case 1-> altaRecurso();
                     case 2-> bajaRecurso();
                     case 3-> actualizarRecurso();
-                    case 4-> listarTodos();
-                    case 5-> buscarNombre();
+                    case 4-> establecerHorario();
+                    case 5-> eliminarHorario();
+                    case 6-> listarTodos();
+                    case 7-> buscarNombre();
                     default -> System.out.println("opción no reconocida. Elija una de las opciones del menu");
                 }
             } while (opcion != 0);
@@ -44,6 +50,65 @@ public class RecursoView {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static void eliminarHorario() throws SQLException {
+        int id_recurso;
+        int id_horario;
+
+        controller.DisponibleEnController.listarDisponibles();
+
+        System.out.println("Indique el id del recurso al que quiere eliminar un horario: ");
+        id_recurso = Integer.parseInt(Entrada.limitador(1, true));
+        System.out.println("Indique el id del horario que quiere eliminar: ");
+        id_horario = Integer.parseInt(Entrada.limitador(1, true));
+
+        if(id_recurso>0&&id_horario>0){
+
+            if(dao.DisponibleEnDAO.findByPk(id_recurso,id_horario)!=null){
+                DisponibleEn horario = new DisponibleEn(id_recurso,id_horario);
+
+                boolean seguir = false;
+                while (!seguir){
+                    System.out.println("Está seguro que desea eliminar esta disponiblidad S/N: ");
+                    String seguro = Entrada.limitador(1,false);
+
+                    if(seguro.equalsIgnoreCase("S")){
+                        controller.DisponibleEnController.eliminarHorario(horario);
+                        System.out.println("Disponibilidad eliminada.");
+                        seguir = true;
+                    }
+                    else if(seguro.equalsIgnoreCase("N")){
+                        System.out.println("No se ha eliminado la disponibilidad.");
+                        seguir = true;
+                    }
+                }
+            }
+
+            else{
+                System.out.println("El recurso no está disponible durante ese horario");
+            }
+        }
+        else{
+            System.out.println("ID de horario o recurso no válidos");
+        }
+    }
+
+    public static void establecerHorario() throws SQLException {
+        int id_recurso;
+        int id_horario;
+
+        listarTodos();
+        view.HorarioView.listarTodos();
+
+        System.out.println("Indique el id del recurso al que quiere añadir un horario: ");
+        id_recurso = Integer.parseInt(Entrada.limitador(1, true));
+        System.out.println("Indique el id del horario que quiere añadir: ");
+        id_horario = Integer.parseInt(Entrada.limitador(1, true));
+
+        controller.DisponibleEnController.establecerHorario(id_recurso, id_horario);
+
+        System.out.println("Al recurso " + controller.RecursoController.findByPK(id_recurso).getNombre()+" se le ha añadido el horario: "+controller.HorarioController.findByPK(id_horario));
     }
 
     public static void listarTodos() throws SQLException {
@@ -118,7 +183,7 @@ public class RecursoView {
         listarRecurso(r1);
     }
 
-    private static void actualizarRecurso() throws SQLException {
+    public static void actualizarRecurso() throws SQLException {
         System.out.print("Introduzca el ID del recurso que desa actualizar: ");
 
         int id = Integer.parseInt(Entrada.limitador(1, true));

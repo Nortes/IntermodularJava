@@ -2,22 +2,24 @@ package dao;
 
 import app.DiaSemana;
 import model.Horario;
-import model.Recurso;
+import model.Reserva;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
 import java.sql.SQLException;
-import static org.junit.jupiter.api.Assertions.*;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.time.LocalTime;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
-class HorarioDAOTest {
-    private static HorarioDAO dao;
+public class ReservaDAOTest {
+
+    private static ReservaDAO dao;
 
     @BeforeAll
     static void setup() {
-        dao = new HorarioDAO();
+        dao = new ReservaDAO();
     }
 
 
@@ -33,24 +35,31 @@ class HorarioDAOTest {
 
     @Test
     void testInsertar() throws SQLException {
+        LocalDate fecha = LocalDate.now();
         LocalTime horarioInicio = new Time(12,30,0).toLocalTime();
         LocalTime horaFin = new Time(20,30,0).toLocalTime();
 
-        Horario h1 = new Horario(0, DiaSemana.Miercoles , horarioInicio, horaFin);
+        Reserva r1 = new Reserva(1,3,2,fecha,horarioInicio,horaFin,3,"Miau", "Prueba1");
 
-        int id  = dao.addHorario(h1);
-        Horario existe = dao.findByPk(id);
+        int id = dao.addReserva(r1);
+        Reserva existe = dao.findByPk(id);
 
         assertNotNull(existe);
-        assertEquals(DiaSemana.Miercoles,existe.getDia());
-        assertEquals(horarioInicio,existe.getHoraInicio());
-        assertEquals(horaFin,existe.getHoraFin());
+        assertEquals(id, existe.getId());
+        assertEquals(3, existe.getIdRecurso());
+        assertEquals(2,existe.getIdCliente());
+        assertEquals(fecha, existe.getFecha());
+        assertEquals(horarioInicio, existe.gethInicio());
+        assertEquals(horaFin, existe.gethFin());
+        assertEquals(3, existe.getNPlazas());
+        assertEquals("Miau", existe.getMotivo());
+        assertEquals("Prueba1", existe.getObservaciones());
 
-        dao.deleteHorario(id);
+        dao.deleteReserva(existe.getidRL(), existe.getIdRecurso());
     }
 
-    @Test
-    void testActualizar() throws SQLException {
+    /* @Test
+   void testActualizar() throws SQLException {
 
         LocalTime horarioInicio = new Time(12,30,0).toLocalTime();
         LocalTime horaFin = new Time(20,30,0).toLocalTime();
@@ -71,20 +80,21 @@ class HorarioDAOTest {
 
         //Vuelvo al estado anterior ya que la actualización se efectua
         dao.deleteHorario(id);
-    }
+    }*/
 
     @Test
     void testEliminar() throws SQLException {
+        LocalDate fecha = LocalDate.now();
         LocalTime horarioInicio = new Time(12,30,0).toLocalTime();
         LocalTime horaFin = new Time(20,30,0).toLocalTime();
 
-        Horario h1 = new Horario(0, DiaSemana.Miercoles , horarioInicio, horaFin);
+        Reserva r1 = new Reserva(1,3,2,fecha,horarioInicio,horaFin,3,"Miau", "Prueba1");
 
-        int id  = dao.addHorario(h1);
+        int id = dao.addReserva(r1);
 
-        dao.deleteHorario(id);
+        dao.deleteReserva(r1.getidRL(), r1.getIdRecurso());
 
-        Horario encontrada=dao.findByPk(id);
+        Reserva encontrada=dao.findByPk(id);
         assertNull(encontrada);
     }
 }

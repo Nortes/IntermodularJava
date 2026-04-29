@@ -1,32 +1,49 @@
 package model;
 
 import java.sql.Time;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Objects;
 
 public class Reserva {
-    private final int id;
+    private final int idRL;
     private final int idRecurso;
     private int idCliente;
-    Date fecha;
-    Time hInicio;
-    Time hFin;
+    LocalDate fecha;
+    LocalTime hInicio;
+    LocalTime hFin;
     Double coste;
-    int num_plazas;
+    int nPlazas;
     String motivo;
-    String Observaciones;
+    String observaciones;
 
-    public Reserva(int id,  int idRecurso, int idCliente,Date fecha,Time hInicio,Time hFin) {
-        this.id = id;
+    public Reserva(int idReservaLocal,  int idRecurso, int idUsuario,LocalDate fecha,LocalTime hInicio,LocalTime hFin, int nPlazas, String motivo, String observaciones) {
+        this.idRL = idReservaLocal;
         this.idRecurso = idRecurso;
-        this.idCliente = idCliente;
+        this.idCliente = idUsuario;
         this.fecha = fecha;
         this.hInicio = hInicio;
         this.hFin = hFin;
+        this.nPlazas = nPlazas;
+        this.motivo = motivo;
+        this.observaciones = observaciones;
     }
 
-    public int getId() {
-        return id;
+    public Reserva(int idReservaLocal, int idRecurso, int idUsuario, LocalDate fecha, LocalTime hInicio, LocalTime hFin, double coste, int nPlazas, String motivo, String observaciones) {
+        this.idRL = idReservaLocal;
+        this.idRecurso = idRecurso;
+        this.idCliente = idUsuario;
+        this.fecha = fecha;
+        this.hInicio = hInicio;
+        this.hFin = hFin;
+        this.coste = coste;
+        this.nPlazas = nPlazas;
+        this.motivo = motivo;
+        this.observaciones = observaciones;
+    }
+
+    public int getidRL() {
+        return idRL;
     }
 
     public int getIdRecurso() {
@@ -41,27 +58,27 @@ public class Reserva {
         this.idCliente = idCliente;
     }
 
-    public Date getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 
-    public Time gethInicio() {
+    public LocalTime gethInicio() {
         return hInicio;
     }
 
-    public void sethInicio(Time hInicio) {
+    public void sethInicio(LocalTime hInicio) {
         this.hInicio = hInicio;
     }
 
-    public Time gethFin() {
+    public LocalTime gethFin() {
         return hFin;
     }
 
-    public void sethFin(Time hFin) {
+    public void sethFin(LocalTime hFin) {
         this.hFin = hFin;
     }
 
@@ -73,20 +90,20 @@ public class Reserva {
         this.coste = coste;
     }
 
-    public int getNum_plazas() {
-        return num_plazas;
+    public int getNPlazas() {
+        return nPlazas;
     }
 
-    public void setNum_plazas(int num_plazas) {
-        this.num_plazas = num_plazas;
+    public void setNPlazas(int num_plazas) {
+        this.nPlazas = num_plazas;
     }
 
     public String getObservaciones() {
-        return Observaciones;
+        return observaciones;
     }
 
     public void setObservaciones(String observaciones) {
-        Observaciones = observaciones;
+        observaciones = observaciones;
     }
 
     public String getMotivo() {
@@ -97,15 +114,21 @@ public class Reserva {
         this.motivo = motivo;
     }
 
+    public int getId(){
+        //Establecemos el id compuesto de la reserva.
+
+        return idRL+idRecurso*100;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Reserva reserva = (Reserva) o;
-        return id == reserva.id || (idRecurso == reserva.idRecurso && idCliente == reserva.idCliente && Objects.equals(fecha, reserva.fecha) && Objects.equals(hInicio, reserva.hInicio) && Objects.equals(hFin, reserva.hFin));
+        return idRL == reserva.idRL && idRecurso==reserva.idRecurso && idCliente==reserva.idCliente;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, idRecurso, idCliente, fecha, hInicio, hFin);
+        return Objects.hash(idRL,  idRecurso, idCliente);
     }
 }

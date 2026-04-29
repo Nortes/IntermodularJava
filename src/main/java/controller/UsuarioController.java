@@ -2,6 +2,7 @@ package controller;
 
 import model.Administrador;
 import model.Usuario;
+import model.Reserva;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -69,6 +70,12 @@ public class UsuarioController {
         Usuario user = dao.UsuarioDAO.findByPk(id);
 
         if (user != null) {
+            for(Reserva r: dao.ReservaDAO.listaReservas()){
+                if(r.getIdCliente() == user.getId()){
+                    System.out.println("El usuario está asociado a alguna reserva y no puede ser dado de baja. Elimine previamente las reservas asociadas a el.");
+                    return;
+                }
+            }
             if( user instanceof Administrador){
                 dao.AdministradorDAO.deleteUsuario(id);
             }

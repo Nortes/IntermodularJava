@@ -8,18 +8,30 @@ public class Recurso {
     private String description;
     private String ubicacion;
     private int capacidad;
+    private int precioHora;
 
+    public Recurso(int idRecurso, String nombre, String descripcion, String ubicacion, int capacidad,  int precioHora) {
+        this.id_recurso = idRecurso;
+        this.nombre = nombre;
+        this.description = descripcion;
+        this.ubicacion = ubicacion;
+        this.capacidad = capacidad;
+        this.precioHora = precioHora;
+    }
     public Recurso(int idRecurso, String nombre, String descripcion, String ubicacion, int capacidad) {
         this.id_recurso = idRecurso;
         this.nombre = nombre;
         this.description = descripcion;
         this.ubicacion = ubicacion;
         this.capacidad = capacidad;
+        this.precioHora = 6;
     }
     public Recurso(int idRecurso, String nombre) {
         this.id_recurso = idRecurso;
         this.nombre = nombre;
+        this.precioHora = 6;
     }
+
     public int getId_recurso() {
         return id_recurso;
     }
@@ -46,6 +58,12 @@ public class Recurso {
     }
     public void setCapacidad(int capacidad) {
         this.capacidad = capacidad;
+    }
+    public int getPrecioHora() {
+        return precioHora;
+    }
+    public void setPrecioHora(int precioHora) {
+        this.precioHora = precioHora;
     }
 
     @Override
