@@ -20,18 +20,18 @@ public class ListasView {
         System.out.println("0. Volver");
     }
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
         try {
             int opcion;
             do {
                 menu();
                 opcion = Integer.parseInt(Entrada.limitador(1, true));
                 switch (opcion) {
-                    case 0-> System.out.println("Gracias por usar el programa");
+                    case 0-> System.out.println("Volviendo");
 
                     case 1-> view.RecursoView.listarTodos();
                     case 2-> view.HorarioView.listarTodos();
-                    //case 3-> view.ReservaView.listarTodos();
+                    case 3-> view.ReservaView.listarTodos();
                     case 4-> view.UsuarioView.listarTodos();
                     case 5-> controller.DisponibleEnController.listarDisponibles();
                     default -> System.out.println("opción no reconocida. Elija una de las opciones del menu");

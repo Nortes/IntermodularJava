@@ -26,14 +26,14 @@ public class RecursoView {
         System.out.println("0. Volver");
     }
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
         try {
             int opcion;
             do {
                 menu();
                 opcion = Integer.parseInt(Entrada.limitador(1, true));
                 switch (opcion) {
-                    case 0-> System.out.println("Gracias por usar el programa");
+                    case 0-> System.out.println("Volviendo");
 
                     case 1-> altaRecurso();
                     case 2-> bajaRecurso();

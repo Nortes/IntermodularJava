@@ -32,33 +32,31 @@ public class ReservaView {
 
         System.out.println("MODIFICACIÓN DE LA RESERVA ");
         System.out.println("===============================");
-        System.out.println("1. Modificar Fecha Reserva");
-        System.out.println("2. Modificar Hora Inicio");
-        System.out.println("3. Modificar Hora Fin");
-        System.out.println("4. Modificar Plazas");
+        System.out.println("1. Modificar Horario");
+        System.out.println("2. Modificar Plazas");
         if(reserva.getMotivo()!=null){
-            System.out.println("5. Modificar Motivo de Reserva");
+            System.out.println("3. Modificar Motivo de Reserva");
         }
         else{
-            System.out.println("5. Añadir Motivo de Reserva");
+            System.out.println("3. Añadir Motivo de Reserva");
         }
         if(reserva.getObservaciones()!=null){
-            System.out.println("6. Modificar Observaciones");
+            System.out.println("4. Modificar Observaciones");
         }
         else{
-            System.out.println("6. Añadir Observaciones");
+            System.out.println("4. Añadir Observaciones");
         }
         System.out.println("0. Volver");
     }
 
-    static void main(String[] args) throws SQLException, IOException {
+    public static void main(String[] args) throws SQLException, IOException {
         try {
             int opcion;
             do {
                 menu();
                 opcion = Integer.parseInt(Entrada.limitador(1, true));
                 switch (opcion) {
-                    case 0-> System.out.println("Gracias por usar el programa");
+                    case 0-> System.out.println("Volviendo");
                     case 1-> altaReserva();
                     case 2-> bajaReserva();
                     case 3-> modificarReserva();
@@ -133,6 +131,7 @@ public class ReservaView {
 
     private static void altaReserva() throws SQLException, IOException {
         Reserva reserva;
+        int nPlazas;
         System.out.println("Seleccione el recurso a reservar");
         RecursoView.listarTodos();
         int idRecurso = Integer.parseInt(Entrada.limitador(11,true));
@@ -142,16 +141,24 @@ public class ReservaView {
         UsuarioView.listarTodos();
         int  idUsuario = Integer.parseInt(Entrada.limitador(11,true));
 
+        DisponibleEnController.listarPorRecurso(recurso);
+
         System.out.println("Introduzca la fecha de la reserva");
         LocalDate fecha = Entrada.leerFecha();
-
-        DisponibleEnController.listarPorRecurso(recurso);
         System.out.println("Introduzca la hora de inicio de la reserva");
         LocalTime hInicio = Entrada.leerHorario();
+        System.out.println("Introduzca la hora de fin de la reserva");
         LocalTime hFin = Entrada.leerHorario();
 
-        System.out.println("Introduzca el número de plazas que quiere reservar (este recurso tiene "+recurso.getCapacidad()+" plazas)");
-        int  nPlazas = Integer.parseInt(Entrada.limitador(11,true));
+        do {
+            System.out.println("Introduzca el número de plazas que quiere reservar (este recurso tiene " + recurso.getCapacidad() + " plazas)");
+            nPlazas = Integer.parseInt(Entrada.limitador(11, true));
+
+            if (nPlazas <= 0 || nPlazas > recurso.getCapacidad()) {
+                System.out.println("Número de plazas no válido para este recurso.");
+            }
+
+        } while (nPlazas>recurso.getCapacidad());
 
         System.out.println("Introduzca el motivo de la reserva: ");
         String motivo = Entrada.limitador(500,false);
@@ -161,8 +168,9 @@ public class ReservaView {
 
         reserva= new Reserva(0, idRecurso,idUsuario,fecha, hInicio, hFin, nPlazas,motivo, observaciones);
 
-        if(controller.ReservaController.alta(reserva)){
-            reserva = ReservaController.findByPK(reserva.getId());
+        int id=controller.ReservaController.alta(reserva);
+        if(id!=-1){
+            reserva = ReservaController.findByPK(id);
             System.out.println("La reserva ha sido tramitada.");
             listarReserva(reserva);
         }
@@ -202,7 +210,84 @@ public class ReservaView {
         }
     }
 
-    private static void modificarReserva() {
+    private static void modificarReserva() throws SQLException, IOException {
+        Reserva reserva;
+        Recurso recurso;
+        int opcion;
+        int id;
 
+        do {
+            listarTodos();
+            System.out.println("Introduzca el ID de la reserva que desea modificar: ");
+
+            id = Integer.parseInt(Entrada.limitador(11, true));
+
+            reserva = controller.ReservaController.findByPK(id);
+
+            if (reserva == null) {
+                System.out.println("La reserva no existe");
+            }
+
+        } while (reserva == null);
+
+        recurso = controller.RecursoController.findByPK(reserva.getId());
+
+        do {
+            menuModif(reserva);
+            opcion = Integer.parseInt(Entrada.limitador(1, true));
+
+            switch (opcion) {
+                case 0 -> System.out.println("Volviendo al menú de reservas");
+
+                case 1 -> {
+                    System.out.println("Introduzca la fecha de la reserva");
+                    LocalDate fecha = Entrada.leerFecha();
+
+                    System.out.println("Introduzca la hora de inicio de la reserva");
+                    LocalTime hInicio = Entrada.leerHorario();
+
+                    System.out.println("Introduzca la hora de fin de la reserva");
+                    LocalTime hFin = Entrada.leerHorario();
+
+                    controller.ReservaController.actualizarHorario(reserva, fecha, hInicio, hFin);
+
+                    reserva = controller.ReservaController.findByPK(id);
+                    listarReserva(reserva);
+                }
+
+                case 2 -> {
+                    System.out.println("Introduzca el nuevo número de plazas: (este recurso tiene"+recurso.getCapacidad()+" plazas)");
+                    int plazas = Integer.parseInt(Entrada.limitador(11, true));
+
+                    controller.ReservaController.actualizarPlazas(reserva, plazas);
+
+                    reserva = controller.ReservaController.findByPK(id);
+                    listarReserva(reserva);
+                }
+
+                case 3 -> {
+                    System.out.println("Introduzca el nuevo motivo de la reserva: ");
+                    String motivo = Entrada.limitador(500,false);
+
+                    controller.ReservaController.actualiarMotivo(reserva, motivo);
+
+                    reserva = controller.ReservaController.findByPK(id);
+                    listarReserva(reserva);
+                }
+
+                case 4 -> {
+                    System.out.println("Introduzca las nuevas observaciones");
+                    String observaciones = Entrada.limitador(500,false);
+
+                    controller.ReservaController.actualizarObs(reserva, observaciones);
+
+                    reserva = controller.ReservaController.findByPK(id);
+                    listarReserva(reserva);
+                }
+
+                default -> System.out.println("Opción no reconocida. Elija una de las opciones del menú");
+            }
+
+        } while (opcion != 0);
     }
 }

@@ -99,16 +99,14 @@ public class UsuarioController {
     public static boolean actualizarCorreo(Usuario user, String email) throws SQLException {
         List<Usuario> usuarios = lista();
 
-        for(Usuario user2: usuarios){
-            if(user.equals(user2)){
+        for (Usuario user2 : usuarios) {
+            if (user2.getMail().equalsIgnoreCase(email) && user2.getId() != user.getId()) {
                 return false;
             }
         }
 
-        int id = user.getId();
-        dao.UsuarioDAO.updateMail(id, email);
+        dao.UsuarioDAO.updateMail(user.getId(), email);
         return true;
-
     }
 
     public static void actualizarFecha(Usuario user, LocalDate fecha) throws SQLException {

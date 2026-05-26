@@ -73,14 +73,14 @@ public class UsuarioView {
         System.out.println("2. Usuario Normal");
     }
 
-    static void main(String[] args) throws SQLException, IOException {
+    public static void main(String[] args) throws SQLException, IOException {
         try {
             int opcion;
             do {
                 menu();
                 opcion = Integer.parseInt(Entrada.limitador(1, true));
                 switch (opcion) {
-                    case 0-> System.out.println("Gracias por usar el programa");
+                    case 0-> System.out.println("Volviendo");
                     case 1-> {
                         boolean admin= false;
                         int tipo;
@@ -227,7 +227,7 @@ public class UsuarioView {
 
         int id = controller.UsuarioController.alta(user);
 
-        if(id!=-1){
+        if(id==-1){
             System.out.println("Usuario existente.");
             user = UsuarioController.buscarPorEmail(user.getMail());
         }

@@ -46,38 +46,37 @@ public class DisponibleEnController {
         }
     }
 
-    public static void establecerHorario(int id_recurso, int id_horario) throws SQLException {
-        boolean conflicto = false;
-        Horario h = dao.HorarioDAO.findByPk(id_horario);
+    public static boolean establecerHorario(int id_recurso, int id_horario) throws SQLException {
+        Recurso recurso = dao.RecursoDAO.findByPk(id_recurso);
+        Horario nuevoHorario = dao.HorarioDAO.findByPk(id_horario);
 
-        if(dao.RecursoDAO.findByPk(id_recurso)!=null && dao.HorarioDAO.findByPk(id_horario)!=null){
-            List<DisponibleEn> lista = dao.DisponibleEnDAO.listaDisponiblidad();
-            DisponibleEn disponible = new DisponibleEn(id_recurso, id_horario);
-            for(DisponibleEn d : lista) {
-                if (!d.equals(disponible)) {
-                    conflicto = true;
-                    break;
-                }
-            }
-            if(conflicto){
-                System.out.println("Horario ya existente");
+        if (recurso == null || nuevoHorario == null) {
+            System.out.println("Recurso u horario no encontrado.");
+            return false;
+        }
 
-            }
-            else{
-                for(DisponibleEn d : lista){
-                    if(d.getIdRecurso() == id_recurso){
-                        if(solapan(dao.HorarioDAO.findByPk(d.getIdHorario()),h)){
-                            System.out.println("Hay un conflicto de horarios");
-                        }
-                        else{
-                            dao.DisponibleEnDAO.addDisponibleEn(disponible);
-                        }
-                    }
+        if (dao.DisponibleEnDAO.findByPk(id_recurso, id_horario) != null) {
+            System.out.println("Ese horario ya está asignado a este recurso.");
+            return false;
+        }
+
+        List<DisponibleEn> lista = dao.DisponibleEnDAO.listaDisponiblidad();
+
+        for (DisponibleEn d : lista) {
+            if (d.getIdRecurso() == id_recurso) {
+                Horario horarioExistente = dao.HorarioDAO.findByPk(d.getIdHorario());
+
+                if (solapan(horarioExistente, nuevoHorario)) {
+                    System.out.println("Hay un conflicto de horarios.");
+                    return false;
                 }
             }
         }
-    }
 
+        dao.DisponibleEnDAO.addDisponibleEn(new DisponibleEn(id_recurso, id_horario));
+        System.out.println("Horario añadido correctamente.");
+        return true;
+    }
 
     public static void eliminarHorario(DisponibleEn horario) throws SQLException {
         dao.DisponibleEnDAO.deleteDisponibleEn(horario);

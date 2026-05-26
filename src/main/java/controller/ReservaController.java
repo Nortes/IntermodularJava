@@ -8,6 +8,8 @@ import model.Reserva;
 
 import java.sql.SQLException;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public class ReservaController {
@@ -15,10 +17,10 @@ public class ReservaController {
         return dao.ReservaDAO.listaReservas();
     }
 
-    public static  boolean alta(Reserva reserva) throws SQLException{
+    public static  int alta(Reserva reserva) throws SQLException{
         Recurso recurso = RecursoController.findByPK(reserva.getIdRecurso());
-        long horas = Duration.between(reserva.gethInicio(), reserva.gethFin()).toHours();
-        double coste = recurso.getPrecioHora()*horas;
+        double horas = Duration.between(reserva.gethInicio(), reserva.gethFin()).toMinutes() / 60.0;
+        double coste = recurso.getPrecioHora() * horas;
 
         reserva.setCoste(coste);
 
@@ -47,22 +49,15 @@ public class ReservaController {
             }
         }
         if(!valido){
-            return false;
+            return -1;
         }
 
         Reserva r = findByPK(reserva.getId());
         if(r!=null){
-            return false;
+            return -1;
         }
 
-        dao.ReservaDAO.addReserva(reserva);
-        return true;
-    }
-
-    public static void update(Reserva reserva) throws SQLException {
-
-        dao.ReservaDAO.updateReserva(reserva);
-
+        return dao.ReservaDAO.addReserva(reserva);
     }
 
     public static void baja(int id) throws SQLException {
@@ -76,5 +71,35 @@ public class ReservaController {
     public static Reserva findByPK(int id) throws SQLException {
 
         return dao.ReservaDAO.findByPk(id);
+    }
+
+    public static void actualizarHorario (Reserva reserva, LocalDate fecha, LocalTime hInicio, LocalTime hFin) throws SQLException{
+        Recurso recurso = RecursoController.findByPK(reserva.getIdRecurso());
+
+        reserva.setFecha(fecha);
+        reserva.sethInicio(hInicio);
+        reserva.sethFin(hFin);
+
+        double horas = Duration.between(reserva.gethInicio(), reserva.gethFin()).toMinutes() / 60.0;
+        double coste = recurso.getPrecioHora() * horas;
+
+        reserva.setCoste(coste);
+
+        dao.ReservaDAO.updateReserva(reserva);
+    }
+
+    public static void actualizarPlazas(Reserva reserva, int plazas) throws SQLException {
+        reserva.setNPlazas(plazas);
+        dao.ReservaDAO.updateReserva(reserva);
+    }
+
+    public static void actualiarMotivo(Reserva reserva, String motivo) throws SQLException {
+        reserva.setMotivo(motivo);
+        dao.ReservaDAO.updateReserva(reserva);
+    }
+
+    public static void actualizarObs(Reserva reserva, String observaciones) throws SQLException {
+        reserva.setObservaciones(observaciones);
+        dao.ReservaDAO.updateReserva(reserva);
     }
 }

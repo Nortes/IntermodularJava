@@ -24,7 +24,7 @@ public class HorarioView {
         System.out.println("0. Volver");
     }
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
         try {
             int opcion;
             do {
@@ -143,7 +143,7 @@ public class HorarioView {
                     String seguro = Entrada.limitador(1,false);
 
                     if(seguro.equalsIgnoreCase("S")){
-                        controller.RecursoController.baja(id);
+                        controller.HorarioController.baja(id);
                         System.out.println("Horario eliminado.");
                         seguir = true;
                     }

@@ -103,7 +103,7 @@ public class Reserva {
     }
 
     public void setObservaciones(String observaciones) {
-        observaciones = observaciones;
+        this.observaciones = observaciones;
     }
 
     public String getMotivo() {

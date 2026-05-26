@@ -63,20 +63,19 @@ public interface Entrada {
     }
 
     public static LocalTime leerHorario() {
-        DateTimeFormatter formatter=DateTimeFormatter.ofPattern("HH:mm");
-        LocalTime hora=null;
-        boolean valido=false;
+        LocalTime hora = null;
+        boolean valido = false;
 
         do {
-            try{
-                hora = LocalTime.parse(Entrada.limitador(5,false));
-            }catch (DateTimeParseException e){
-                System.out.println("Formato fecha (dd/mm/yyyy) incorrecto");
-                valido=false;
+            try {
+                hora = LocalTime.parse(Entrada.limitador(5, false));
+                valido = true;
+            } catch (DateTimeParseException e) {
+                System.out.println("Formato hora incorrecto. Use HH:mm");
             }
-        }while(!valido);
+        } while (!valido);
 
-        return (hora);
+        return hora;
     }
 
     public static DiaSemana matchDiaSemana (String dia){
