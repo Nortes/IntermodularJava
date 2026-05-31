@@ -42,22 +42,26 @@ public class ReservaController {
 
         for(DisponibleEn d: dao.DisponibleEnDAO.listaDisponiblidad()){
             if(d.getIdRecurso()==reserva.getIdRecurso()){
-                if (horaReserva.equals(HorarioController.findByPK(d.getIdHorario()))){
+                Horario horario = dao.HorarioDAO.findByPk(d.getIdHorario());
+                if (!horario.getHoraInicio().isAfter(reserva.gethInicio()) || !horario.getHoraFin().isBefore(reserva.gethFin())) {
                     valido = true;
                     break;
                 }
             }
         }
+
         if(!valido){
+            System.out.println("Entra 1");
             return -1;
         }
 
         Reserva r = findByPK(reserva.getId());
         if(r!=null){
+            System.out.println("Entra 2");
             return -1;
         }
 
-        return dao.ReservaDAO.addReserva(reserva);
+        return   dao.ReservaDAO.addReserva(reserva);
     }
 
     public static void baja(int id) throws SQLException {

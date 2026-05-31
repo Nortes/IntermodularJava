@@ -169,6 +169,7 @@ public class ReservaView {
         reserva= new Reserva(0, idRecurso,idUsuario,fecha, hInicio, hFin, nPlazas,motivo, observaciones);
 
         int id=controller.ReservaController.alta(reserva);
+        System.out.println(id);
         if(id!=-1){
             reserva = ReservaController.findByPK(id);
             System.out.println("La reserva ha sido tramitada.");
