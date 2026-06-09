@@ -1,0 +1,28 @@
+[
+  {
+    "id": 202,
+    "idReservaLocal": 2,
+    "idRecurso": 2,
+    "idUsuario": 1,
+    "fecha": "2026-06-15",
+    "horaInicio": "10:00",
+    "horaFin": "12:00",
+    "coste": 12.0,
+    "numeroPlazas": 4,
+    "motivo": "Reunión de equipo",
+    "observaciones": "Se necesita proyector"
+  },
+  {
+    "id": 301,
+    "idReservaLocal": 1,
+    "idRecurso": 3,
+    "idUsuario": 2,
+    "fecha": "2026-06-16",
+    "horaInicio": "16:00",
+    "horaFin": "18:00",
+    "coste": 12.0,
+    "numeroPlazas": 2,
+    "motivo": "Clase práctica",
+    "observaciones": "Sin observaciones"
+  }
+]
