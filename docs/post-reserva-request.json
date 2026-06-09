@@ -1,0 +1,10 @@
+{
+  "idRecurso": 2,
+  "idUsuario": 1,
+  "fecha": "2026-06-15",
+  "horaInicio": "10:00",
+  "horaFin": "12:00",
+  "numeroPlazas": 4,
+  "motivo": "Reunión de equipo",
+  "observaciones": "Se necesita proyector"
+}
