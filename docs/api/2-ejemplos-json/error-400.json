@@ -1,0 +1,13 @@
+{
+  "error": "Datos de entrada inválidos",
+  "detalles": [
+    {
+      "campo": "horaInicio",
+      "mensaje": "La hora de inicio debe ser anterior a la hora de fin"
+    },
+    {
+      "campo": "idRecurso",
+      "mensaje": "El recurso no está disponible en el horario seleccionado"
+    }
+  ]
+}
